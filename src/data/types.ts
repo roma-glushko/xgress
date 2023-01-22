@@ -1,7 +1,11 @@
+import { SimulationNodeDatum } from 'd3'
 
-export interface NodeData {
+export interface NodeData extends SimulationNodeDatum {
     id: string
     group: number
+
+    x?: number
+    y?: number
 }
 
 export interface LinkData {

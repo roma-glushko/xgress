@@ -12,7 +12,7 @@ const Label: FunctionalComponent<LabelProps> = ({node}: LabelProps) => {
 
     useEffect(() => {
         d3.select(labelRef.current).data([node]);
-    }, [node, labelRef]);
+    }, [node]);
 
     return <text className="label" ref={labelRef}>{node.id}</text>;
 }

@@ -10,7 +10,7 @@ const App = () => {
           <h1>🔍XGress</h1>
       </header>
       <div>
-        <NetworkGraph width={window.screen.availWidth} height={window.screen.availHeight} graph={data} />
+        <NetworkGraph width={window.screen.availWidth} height={window.screen.availHeight + 50} graph={data} />
       </div>
     </>
   )
