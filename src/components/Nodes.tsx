@@ -6,9 +6,10 @@ import { NodeData } from "/@/data/types"
 interface NodeProps {
     node: NodeData
     color: string
+    radius: number
 }
 
-const Node: FunctionalComponent<NodeProps> = ({node, color}: NodeProps) => {
+const Node: FunctionalComponent<NodeProps> = ({node, radius, color}: NodeProps) => {
     const nodeRef = useRef<SVGCircleElement>(null)
 
     useEffect(() => {
@@ -16,7 +17,7 @@ const Node: FunctionalComponent<NodeProps> = ({node, color}: NodeProps) => {
     }, [node, nodeRef]);
 
     return (
-      <circle className="node" r={5} fill={color} ref={nodeRef}>
+      <circle ref={nodeRef} className="node" r={radius} fill={color}>
         <title>{node.id}</title>
       </circle>
     );
@@ -24,13 +25,18 @@ const Node: FunctionalComponent<NodeProps> = ({node, color}: NodeProps) => {
 
 interface NodesProps {
     nodes: NodeData[]
-    simulation: any // TODO: figure out the concreat class here
+    colorScheme: any
+    simulation: any // TODO: figure out the concrete class here
 }
 
-const Nodes: FunctionalComponent<NodesProps> = ({nodes, simulation}: NodesProps) => {
-     useEffect(() => {
-        const onDragStart = (d: any) => {
-          if (!d3.event.active) {
+const Nodes: FunctionalComponent<NodesProps> = ({nodes, colorScheme, simulation}: NodesProps) => {
+    const graphNodes = nodes.map((node: NodeData, index: number) => {
+      return <Node key={index} node={node} radius={6} color={colorScheme(node.group.toString())} />
+    })
+
+    useEffect(() => {
+        const onDragStart = (event: any, d: any) => {
+          if (!event.active) {
             simulation.alphaTarget(0.3).restart();
           }
 
@@ -38,13 +44,13 @@ const Nodes: FunctionalComponent<NodesProps> = ({nodes, simulation}: NodesProps)
           d.fy = d.y;
         }
 
-        const onDrag = (d: any) => {
-          d.fx = d3.event.x;
-          d.fy = d3.event.y;
+        const onDrag = (event: any, d: any) => {
+          d.fx = event.x;
+          d.fy = event.y;
         }
 
-        const onDragEnd = (d: any) => {
-          if (!d3.event.active) {
+        const onDragEnd = (event: any, d: any) => {
+          if (!event.active) {
             simulation.alphaTarget(0);
           }
           d.fx = null;
@@ -59,10 +65,6 @@ const Nodes: FunctionalComponent<NodesProps> = ({nodes, simulation}: NodesProps)
 
     }, [simulation]);
 
-    const colorScheme = d3.scaleOrdinal(d3.schemeCategory10)
-    const graphNodes = nodes.map((node: NodeData, index: number) => {
-      return <Node key={index} node={node} color={colorScheme(node.group.toString())} />
-    })
 
     return (
         <g className="nodes">

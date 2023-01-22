@@ -14,11 +14,13 @@ interface Props {
 }
 
 class NetworkGraph extends Component<Props> {
-    canvas: RefObject<any>;
+    svg: RefObject<any>;
+    canvas: any;
 
     graph: GraphData
     width: number;
     height: number;
+    colorScheme: any;
 
     force: any;
 
@@ -29,17 +31,16 @@ class NetworkGraph extends Component<Props> {
         this.height = props.height
         this.graph = props.graph
 
-        this.canvas = createRef();
+        this.colorScheme = d3.scaleOrdinal(d3.schemePaired)
+
+        this.svg = createRef();
+        this.canvas = d3.select(this.svg.current)
 
         this.force = d3.forceSimulation()
           .force('link', d3.forceLink().id((d: any) => d.id).distance(150))
           .force('charge', d3.forceManyBody().strength(-500))
           .force('x', d3.forceX(this.width / 2))
           .force('y', d3.forceY(this.height / 2))
-          .nodes(this.graph.nodes)
-          // .on('tick', () => this.tick());
-
-        this.force.force("link").links(this.graph.links);
     }
 
      componentDidMount() {
@@ -47,9 +48,7 @@ class NetworkGraph extends Component<Props> {
         const link = d3.selectAll(".link");
         const label = d3.selectAll(".label");
 
-        this.force.nodes(this.props.graph.nodes).on("tick", ticked);
-
-        function ticked() {
+        const ticked = () => {
           link
             .attr("x1", function (d: any) {
               return d.source.x;
@@ -74,20 +73,29 @@ class NetworkGraph extends Component<Props> {
 
           label
             .attr("x", function (d: any) {
-              return d.x + 5;
+              return d.x + 10;
             })
             .attr("y", function (d: any) {
-              return d.y + 5;
+              return d.y + 4;
             });
         }
+
+        this.force.nodes(this.graph.nodes).on("tick", ticked);
+        this.force.force("link").links(this.graph.links);
+
+        const redraw = (event) => {
+            this.canvas.attr("transform", `translate(${event.translate}) scale(${event.scale})`);
+        }
+
+        this.canvas.call(d3.behavior.zoom().on("zoom", redraw))
       }
 
     render() {
         return (
           <div className="container" >
-              <svg className="canvas" ref={this.canvas} width={this.width} height={this.height}>
+              <svg className="canvas" ref={this.svg} width={this.width} height={this.height} pointer-events="all" viewBox={`0 0 ` + this.width + " " + this.height}>
                 <Links links={this.graph.links} />
-                <Nodes nodes={this.graph.nodes} simulation={this.force} />
+                <Nodes nodes={this.graph.nodes} colorScheme={this.colorScheme} simulation={this.force} />
                 <Labels nodes={this.graph.nodes} />
               </svg>
           </div>
