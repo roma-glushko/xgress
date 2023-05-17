@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "..",
     "paths": {
       "/@/*": ["src/*"]
     },
@@ -21,5 +21,7 @@
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment"
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

@@ -1,11 +1,11 @@
 import * as d3 from "d3";
 import { Component, RefObject, createRef } from 'preact'
-import "/@/components/NetworkGraph.css"
-import {GraphData, NodeData} from "/@/data/types"
-import Nodes from "/@/components/Nodes";
-import Links from "/@/components/Links";
-import Labels from "/@/components/Labels";
-import Namespaces, { createNamespaces, NamespaceData } from "/@/components/Namespaces";
+import "./NetworkGraph.css"
+import {GraphData, NodeData} from "../data/types"
+import Nodes from "./Nodes";
+import Links from "./Links";
+import Labels from "./Labels";
+import Namespaces, { createNamespaces, NamespaceData } from "./Namespaces";
 
 
 interface Props {

@@ -1,5 +1,5 @@
-import NetworkGraph from "/@/components/NetworkGraph"
-import data from "/@/data/graph"
+import NetworkGraph from "./components/NetworkGraph"
+import data from "./data/graph"
 
 import "./app.css"
 

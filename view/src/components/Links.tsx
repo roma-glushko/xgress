@@ -1,7 +1,7 @@
 import { FunctionalComponent } from "preact"
 import { useRef, useEffect } from "preact/hooks"
 import * as d3 from "d3";
-import { LinkData } from "/@/data/types"
+import { LinkData } from "../data/types"
 
 interface LinkProps {
     link: LinkData

@@ -1,7 +1,7 @@
 import { FunctionalComponent } from "preact"
 import { useRef, useEffect } from "preact/hooks"
 import * as d3 from "d3";
-import { NodeData } from "/@/data/types"
+import { NodeData } from "../data/types"
 
 interface NodeProps {
     node: NodeData
